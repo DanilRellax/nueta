@@ -332,6 +332,7 @@ setInterval(() => {
 	});
 }, 2000);
 
-http.listen(APP_PORT, () => {
-	console.log("[ TELEGRAM ADS ] SERVER CREATE!");
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

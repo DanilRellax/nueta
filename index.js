@@ -9,7 +9,7 @@ const options = {
 
 const app = express();
 const APP_PORT = 8080;
-var http = require('https').createServer(options, app);
+var http = require('https').createServer(app);
 const io = require('socket.io')(http, {});
 var cors = require('cors');
 app.use(cors());

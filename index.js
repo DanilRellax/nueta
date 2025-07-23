@@ -6,7 +6,7 @@ const options = {
 	key: fs.readFileSync("key.key"),
 	cert: fs.readFileSync("cert.crt")
 }
-
+const { Server } = require("socket.io");
 const app = express();
 const APP_PORT = 8080;
 const http = require("http");

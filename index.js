@@ -9,8 +9,14 @@ const options = {
 
 const app = express();
 const APP_PORT = 8080;
-var http = require('https').createServer(app);
-const io = require('socket.io')(http, {});
+const http = require("http");
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // можешь ограничить своим доменом
+    methods: ["GET", "POST"]
+  }
+});
 var cors = require('cors');
 app.use(cors());
 app.use(express.json());
@@ -333,6 +339,6 @@ setInterval(() => {
 }, 2000);
 
 const PORT = process.env.PORT || 3000;
-http.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

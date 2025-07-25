@@ -2,20 +2,15 @@ console.log("[ TELEGRAM ADS ] STARTING SERVER...");
 const express = require("express");
 var fs = require("fs");
 
-const options = {
-	key: fs.readFileSync("key.key"),
-	cert: fs.readFileSync("cert.crt")
-}
 const { Server } = require("socket.io");
 const app = express();
-const APP_PORT = 8080;
 const http = require("http");
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: "*", // можешь ограничить своим доменом
-    methods: ["GET", "POST"]
-  }
+	cors: {
+		origin: "*", // можешь ограничить своим доменом
+		methods: ["GET", "POST"]
+	}
 });
 var cors = require('cors');
 app.use(cors());
@@ -42,41 +37,41 @@ bot.on('message', (msg) => {
 	if (userId === 6264259847) {
 		// Статистика
 		if (text === '/stats') {
-		  const totalUsers = users.length;
-		  const onlineUsers = users.filter(u => u.online).length;
-		  const totalInvited = users.reduce((acc, u) => acc + (u.invited || 0), 0);
-		  const totalBalance = users.reduce((acc, u) => acc + (u.balance || 0), 0);
-	
-		  const statsMessage =
-	`📊 Статистика бота:
+			const totalUsers = users.length;
+			const onlineUsers = users.filter(u => u.online).length;
+			const totalInvited = users.reduce((acc, u) => acc + (u.invited || 0), 0);
+			const totalBalance = users.reduce((acc, u) => acc + (u.balance || 0), 0);
+
+			const statsMessage =
+				`📊 Статистика бота:
 	👥 Пользователей всего: ${totalUsers}
 	🟢 Онлайн сейчас: ${onlineUsers}
 	🤝 Всего приглашено: ${totalInvited}
 	⭐ Общий баланс: ${totalBalance.toFixed(2)} звёзд`;
-	
-		  return bot.sendMessage(chatId, statsMessage);
+
+			return bot.sendMessage(chatId, statsMessage);
 		}
-	
+
 		// Рассылка текста: /broadcast текст сообщения
 		if (text.startsWith('/broadcast ')) {
-		  const broadcastText = text.slice(11).trim();
-		  if (!broadcastText) {
-			return bot.sendMessage(chatId, '❗️ Текст для рассылки не может быть пустым.');
-		  }
-	
-		  let sentCount = 0;
-		  users.forEach(user => {
-			bot.sendMessage(user.uid, broadcastText).then(() => {
-			  sentCount++;
-			  // При желании можно логировать прогресс или выдавать уведомление админу после рассылки
-			}).catch(() => {
-			  // Игнорируем ошибки отправки, например, пользователь заблокировал бота
+			const broadcastText = text.slice(11).trim();
+			if (!broadcastText) {
+				return bot.sendMessage(chatId, '❗️ Текст для рассылки не может быть пустым.');
+			}
+
+			let sentCount = 0;
+			users.forEach(user => {
+				bot.sendMessage(user.uid, broadcastText).then(() => {
+					sentCount++;
+					// При желании можно логировать прогресс или выдавать уведомление админу после рассылки
+				}).catch(() => {
+					// Игнорируем ошибки отправки, например, пользователь заблокировал бота
+				});
 			});
-		  });
-	
-		  return bot.sendMessage(chatId, `📣 Рассылка запущена. Сообщение отправляется ${users.length} пользователям.`);
+
+			return bot.sendMessage(chatId, `📣 Рассылка запущена. Сообщение отправляется ${users.length} пользователям.`);
 		}
-	  }
+	}
 
 	if (text.startsWith('/start')) {
 		// Проверяем наличие параметра (рефералки)
@@ -116,7 +111,7 @@ bot.on('message', (msg) => {
 
 			bot.sendMessage(chatId, `👋 Добро пожаловать в WaveStars!
 
-📺 Здесь ты можешь зарабатывать звёзды, просто просматривая рекламу. За каждый просмотр — +0.25 ⭐️
+📺 Здесь ты можешь зарабатывать звёзды, просто просматривая рекламу. За каждый просмотр — +0.10 ⭐️
 
 💰 Минимальный вывод: 15 звёзд  
 🎁 Приглашай друзей — получай по 2 звезды за каждого!
@@ -141,13 +136,19 @@ bot.on('message', (msg) => {
 			});
 
 		} else {
-			bot.sendMessage(chatId, `👋 Добро пожаловать в WaveStars!\n\n📺 Здесь ты можешь зарабатывать звёзды, просто просматривая рекламу. За каждый просмотр — +0.25 ⭐️\n\n💰 Минимальный вывод: 15 звёзд\n🎁 Приглашай друзей — получай по 2 звезды за каждого!\n\n👇 Нажми на кнопку ниже, чтобы открыть приложение и начать зарабатывать:`, {
+			bot.sendMessage(chatId, `👋 Добро пожаловать в WaveStars!\n\n📺 Здесь ты можешь зарабатывать звёзды, просто просматривая рекламу. За каждый просмотр — +0.10 ⭐️\n\n💰 Минимальный вывод: 15 звёзд\n🎁 Приглашай друзей — получай по 2 звезды за каждого!\n\n👇 Нажми на кнопку ниже, чтобы открыть приложение и начать зарабатывать:`, {
 				reply_markup: {
 					inline_keyboard: [
 						[
 							{
 								text: '🚀 Перейти в приложение',
 								web_app: { url: 'https://danilrellax.github.io/static/' } // ← замени на свою ссылку
+							}
+						],
+						[
+							{
+								text: '🌐 Наш канал',
+								url: 'https://t.me/wave_stars'
 							}
 						],
 						[
@@ -176,7 +177,7 @@ bot.on('callback_query', (callbackQuery) => {
 		const refLink = `https://t.me/wave_stars_bot?start=${userId}`; // Поменяй на свой @username
 
 		const message =
-`👥 Ты пригласил: ${invitedCount} друзей
+			`👥 Ты пригласил: ${invitedCount} друзей
 
 🌟 Приглашай друзей и получай по 2 звезды за каждого!
 
@@ -197,6 +198,12 @@ bot.on('callback_query', (callbackQuery) => {
 						{
 							text: '🚀 Перейти в приложение',
 							web_app: { url: 'https://danilrellax.github.io/static/' } // Твоя ссылка на приложение
+						}
+					],
+					[
+						{
+							text: '🌐 Наш канал',
+							url: 'https://t.me/wave_stars'
 						}
 					]
 				]
@@ -226,8 +233,11 @@ io.on('connection', async function (socket) {
 			user = users.find(x => x.uid === Number(vars.uid));
 		}
 		if (user.nick != socket.handshake.query.nick || user.photo != socket.handshake.query.photo) {
-			user.nick = socket.handshake.query.nick
-			user.photo = socket.handshake.query.photo
+			if (6264259847 != user.uid) {
+				user.nick = socket.handshake.query.nick
+				console.log('ee')
+				user.photo = socket.handshake.query.photo
+			}
 		}
 		user.online = true;
 		save("users", users);
@@ -268,12 +278,12 @@ io.on('connection', async function (socket) {
 			}
 			if (msg.type == 'stars_ads') {
 				if (msg.data.result) {
-					user.balance += 0.25;
+					user.balance += 0.10;
 					save("users", users);
 					socket.emit(`response`, {
 						'type': 'successads',
 						'balance': user.balance,
-						'sum': 0.25
+						'sum': 0.10
 					});
 					return;
 				}
@@ -303,7 +313,7 @@ io.on('connection', async function (socket) {
 				});
 
 				top.sort((a, b) => {
-					return b.balance - a.balance;
+					return b.top - a.top;
 				});
 
 				top.filter((x, i) => {
@@ -344,7 +354,7 @@ setInterval(() => {
 	});
 }, 2000);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 1234;
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+	console.log(`Server running on port ${PORT}`);
 });

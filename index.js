@@ -129,7 +129,10 @@ bot.on('message', (msg) => {
 							{
 								text: '👥 Пригласить друга',
 								callback_data: 'show_referral'
-							}
+							}, {
+								text: '💰 Вывести средства',
+								callback_data: 'show_vivod'
+							},
 						]
 					]
 				}
@@ -155,7 +158,10 @@ bot.on('message', (msg) => {
 							{
 								text: '👥 Пригласить друга',
 								callback_data: 'show_referral'
-							}
+							}, {
+								text: '💰 Вывести средства',
+								callback_data: 'show_vivod'
+							},
 						]
 					]
 				}
@@ -188,6 +194,44 @@ bot.on('callback_query', (callbackQuery) => {
 
 🔗 Присоединяйся: ${refLink}`;
 
+		// Редактируем сообщение, не удаляя его
+		bot.editMessageText(message, {
+			chat_id: msg.chat.id,
+			message_id: msg.message_id,
+			reply_markup: {
+				inline_keyboard: [
+					[
+						{
+							text: '🚀 Перейти в приложение',
+							web_app: { url: 'https://danilrellax.github.io/static/' } // Твоя ссылка на приложение
+						}
+					],
+					[
+						{
+							text: '🌐 Наш канал',
+							url: 'https://t.me/wave_stars'
+						}
+					]
+				]
+			}
+		});
+
+		bot.answerCallbackQuery(callbackQuery.id);
+	}
+	if (data === 'show_vivod') {
+		let message = '';
+		const user = users.find(u => u.uid === userId);
+
+		const invitedCount = user.invited || 0;
+		if (user.balance < 15) {
+			message = '😕 Минимальная сумма вывода — 15 звезд!'
+		}
+		if (user.balance >= 15 && invitedCount < 5) {
+			message = '✊ Пригласите 5 друзей и вывод будет доступен!'
+		} else {
+			user.balance = 0
+			message = '✅ Средства успешно выведены! Ожидайте до 5 минут!'
+		}
 		// Редактируем сообщение, не удаляя его
 		bot.editMessageText(message, {
 			chat_id: msg.chat.id,
@@ -354,7 +398,7 @@ setInterval(() => {
 	});
 }, 2000);
 
-const PORT = process.env.PORT || 1234;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });

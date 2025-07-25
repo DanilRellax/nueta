@@ -228,7 +228,8 @@ bot.on('callback_query', (callbackQuery) => {
 		}
 		if (user.balance >= 15 && invitedCount < 5) {
 			message = '✊ Пригласите 5 друзей и вывод будет доступен!'
-		} else {
+		} 
+		if (user.balance >= 15 && invitedCount >= 5) {
 			user.balance = 0
 			message = '✅ Средства успешно выведены! Ожидайте до 5 минут!'
 		}

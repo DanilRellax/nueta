@@ -1,3 +1,11 @@
 [
-
+	{
+		"uid": 6264259847,
+		"nick": "Pavel Durov",
+		"photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDsXAC55PtuqtspypWaijWh5_-yDSbs9ImFw&s",
+		"online": false,
+		"balance": 0.5,
+		"ban": false,
+		"ref": null
+	}
 ]
